@@ -19,7 +19,6 @@
 #
 
 # install packages
-include_recipe 'postgresql::install_client'
 node['postgresql']['server_packages'].each { |pkg| package pkg }
 
 
