@@ -49,6 +49,5 @@ define :pg_recovery, :action => :create, :cookbook => 'postgresql', :source => '
     template_attr.each { |k, v| send(k, v) }
     notifies  :reload, resources(:service => 'postgresql') if is_slave
     variables :config => recovery_conf unless template_attr[:variables]
-    not_if    { recovery_conf.empty? }
   end
 end
