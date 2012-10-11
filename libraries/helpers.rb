@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: postgres
-# Recipe:: default_server
+# Cookbook Name:: postgresql
+# Library:: helpers
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,23 +18,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# install packages
-include_recipe 'postgresql::install_server'
+module Postgresql
+  module Helpers
 
-pg_conf 'postgresql.conf'
-pg_hba 'pg_hba.conf'
-pg_ident 'pg_ident.conf'
-pg_recovery 'recovery.conf'
+    # delete all template attributes chef knows from all_attr
+    # and return them in a seperate hash
+    def extract_template_attributes(all_attr)
+      # all template attributes chef knows
+      t_attr = [ :name, :action, :backup, :cookbook, :path, :source,
+                 :group, :mode, :inherits, :owner, :variables, :local ]
+      o_attr = {}
+      t_attr.each { |attr| o_attr[attr] = all_attr.delete(attr) if all_attr[attr] }
+      o_attr
+    end
 
-# deploy certificates if configured
-if node['postgresql']['certificate']
+    # merge d (defaults) with new hash (n)
+    def merge_settings(d, n)
+      r = d.to_hash
+      n.each { |k, v| r[k.to_s] = v }
+      r
+    end
 
-  # by default, use the certificate for this hostname
-  if node['postgresql']['certificate'].to_s == 'true'
-    pg_certificate node['hostname']
-
-  # if specified, use certificate name
-  else
-    pg_certificate node['postgresql']['certificate']
   end
 end

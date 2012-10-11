@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: postgres
-# Recipe:: default_server
+# Cookbook Name:: postgresql
+# Definition:: pg_certificate
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,23 +18,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# install packages
-include_recipe 'postgresql::install_server'
+class Chef::Recipe
+  include Postgresql::Helpers
+end
 
-pg_conf 'postgresql.conf'
-pg_hba 'pg_hba.conf'
-pg_ident 'pg_ident.conf'
-pg_recovery 'recovery.conf'
 
-# deploy certificates if configured
-if node['postgresql']['certificate']
+define :pg_certificate, :action => :create do
+  include_recipe 'postgresql::install_server'
 
-  # by default, use the certificate for this hostname
-  if node['postgresql']['certificate'].to_s == 'true'
-    pg_certificate node['hostname']
+  # use defaults unless overridden
+  params[:cert_path] ||= node['postgresql']['data_dir']
+  params[:owner] ||= node['postgresql']['db_user']
+  params[:group] ||= node['postgresql']['db_group']
 
-  # if specified, use certificate name
-  else
-    pg_certificate node['postgresql']['certificate']
+  certificate_manage params[:name] do
+    search_id params[:name]
+    cert_path params[:cert_path]
+    owner     params[:owner]
+    group     params[:group]
+    key_file  'server.key'
+    cert_file 'server.crt'
+    notifies  :reload, resources(:service => 'postgresql')
   end
 end
