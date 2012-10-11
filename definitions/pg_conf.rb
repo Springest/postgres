@@ -41,7 +41,7 @@ define :pg_conf, :action => :create, :cookbook => 'postgresql', :source => 'post
   template template_attr[:name] do
     template_attr.each { |k, v| send(k, v) }
 
-    variables :config => postgresql_conf
+    variables :config => postgresql_conf unless template_attr[:variables]
     notifies  :restart, resources(:service => 'postgresql')
   end
 end

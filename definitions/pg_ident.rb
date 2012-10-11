@@ -41,7 +41,7 @@ define :pg_ident, :action => :create, :cookbook => 'postgresql', :source => 'pg_
   template 'pg_ident.conf' do
     template_attr.each { |k, v| send(k, v) }
 
-    variables :config => Array(params[:rules])
+    variables :config => Array(params[:rules]) unless template_attr[:variables]
     notifies  :reload, resources(:service => 'postgresql')
   end
 end

@@ -41,7 +41,7 @@ define :pg_hba, :action => :create, :cookbook => 'postgresql', :source => 'pg_hb
   template template_attr[:name] do
     template_attr.each { |k, v| send(k, v) }
 
-    variables :config => Array(params[:rules])
+    variables :config => Array(params[:rules]) unless template_attr[:variables]
     notifies  :reload, resources(:service => 'postgresql')
   end
 end
