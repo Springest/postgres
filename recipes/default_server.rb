@@ -22,9 +22,9 @@
 include_recipe 'postgresql::install_server'
 
 pg_conf 'postgresql.conf'
-pg_hba 'pg_hba.conf'
-pg_ident 'pg_ident.conf'
-pg_recovery 'recovery.conf'
+pg_hba 'pg_hba.conf' unless node['postgresql']['pg_hba.conf'].empty?
+pg_ident 'pg_ident.conf' unless node['postgresql']['pg_ident.conf'].empty?
+pg_recovery 'recovery.conf' unless node['postgresql']['recovery.conf'].empty?
 
 # deploy certificates if configured
 if node['postgresql']['certificate']
