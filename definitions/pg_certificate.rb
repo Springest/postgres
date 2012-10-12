@@ -32,12 +32,17 @@ define :pg_certificate, :action => :create do
   params[:group] ||= node['postgresql']['db_group']
 
   certificate_manage params[:name] do
-    search_id params[:name]
-    cert_path params[:cert_path]
-    owner     params[:owner]
-    group     params[:group]
-    key_file  'server.key'
-    cert_file 'server.crt'
-    notifies  :reload, resources(:service => 'postgresql')
+    cert_path       params[:cert_path]
+    owner           params[:owner]
+    group           params[:group]
+    key_file        'server.key'
+    cert_file       'server.crt'
+
+    data_bag        params[:data_bag]        if params[:data_bag]
+    data_bag_secret params[:data_bag_secret] if params[:data_bag_secret]
+    cookbook        params[:cookbook]        if params[:cookbook]
+
+    action          params[:action]
+    notifies        :reload, resources(:service => 'postgresql')
   end
 end
