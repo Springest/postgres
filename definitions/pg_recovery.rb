@@ -30,10 +30,10 @@ define :pg_recovery, :action => :create, :cookbook => 'postgresql', :source => '
   template_attr = extract_template_attributes(params)
 
   # fill in the nodes defaults if not given
+  template_attr[:mode]  ||= '0644'
   template_attr[:path]  ||= "#{node['postgresql']['data_dir']}/recovery.conf"
   template_attr[:owner] ||= node['postgresql']['db_user']
   template_attr[:group] ||= node['postgresql']['db_group']
-  template_attr[:mode]  ||= '0644'
 
   # merge default settings with the ones given in additional parameters
   # (recovery.conf is empty by default, but anyways)

@@ -30,10 +30,10 @@ define :pg_conf, :action => :create, :cookbook => 'postgresql', :source => 'post
   template_attr = extract_template_attributes(params)
 
   # fill in the nodes defaults if not given
+  template_attr[:mode]  ||= '0640'
   template_attr[:path]  ||= "#{node['postgresql']['conf_dir']}/postgresql.conf"
   template_attr[:owner] ||= node['postgresql']['db_user']
   template_attr[:group] ||= node['postgresql']['db_group']
-  template_attr[:mode]  ||= '0640'
 
   # merge default settings with the ones given in additional parameters
   postgresql_conf = merge_settings(node['postgresql']['postgresql.conf'], params)
