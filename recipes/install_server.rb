@@ -21,8 +21,6 @@
 # install packages
 node['postgresql']['server_packages'].each { |pkg| package pkg }
 
-
-# setup directories
 unless node['postgresql']['conf_dir'] == node['postgresql']['data_dir']
   directory node['postgresql']['conf_dir'] do
     owner     node['postgresql']['db_user']
@@ -37,8 +35,6 @@ directory node['postgresql']['data_dir'] do
   mode      '0700'
 end
 
-
-# enable service
 service 'postgresql' do
   service_name node['postgresql']['service_name']
   supports :restart => true, :status => true, :reload => true
