@@ -36,7 +36,8 @@ define :pg_conf, :action => :create, :cookbook => 'postgresql', :source => 'post
   template_attr[:group] ||= node['postgresql']['db_group']
 
   # merge default settings with the ones given in additional parameters
-  postgresql_conf = merge_settings(node['postgresql']['postgresql.conf'], params)
+  # sort the hash, so chef doesn't restart if nothing changed but the order
+  postgresql_conf = merge_settings(node['postgresql']['postgresql.conf'], params).sort
 
   template template_attr[:name] do
     template_attr.each { |k, v| send(k, v) }

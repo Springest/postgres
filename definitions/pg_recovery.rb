@@ -37,7 +37,8 @@ define :pg_recovery, :action => :create, :cookbook => 'postgresql', :source => '
 
   # merge default settings with the ones given in additional parameters
   # (recovery.conf is empty by default, but anyways)
-  recovery_conf = merge_settings(node['postgresql']['recovery.conf'], params)
+  # sort the hash, so chef doesn't restart if nothing changed but the order
+  recovery_conf = merge_settings(node['postgresql']['recovery.conf'], params).sort
 
   # check if this node is a postgres slave
   is_slave = File.exists? template_attr[:path]
