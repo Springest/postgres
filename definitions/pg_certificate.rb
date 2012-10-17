@@ -43,6 +43,6 @@ define :pg_certificate, :action => :create do
     cookbook        params[:cookbook]        if params[:cookbook]
 
     action          params[:action]
-    notifies        :reload, resources(:service => 'postgresql')
+    notifies        :restart, resources(:service => 'postgresql')
   end
 end
