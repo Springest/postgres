@@ -41,8 +41,8 @@ when 'debian'
   else
     default['postgresql']['service_name'] = 'postgresql'
   end
-  default['postgresql']['client_packages'] = [ 'postgresql-client', 'libpq-dev' ]
-  default['postgresql']['server_packages'] = [ 'postgresql' ]
+  default['postgresql']['client_packages'] = [ "postgresql-client-#{node['postgresql']['version']}", 'libpq-dev' ]
+  default['postgresql']['server_packages'] = [ "postgresql-#{node['postgresql']['version']}" ]
 
 
 when 'ubuntu'
@@ -65,8 +65,8 @@ when 'ubuntu'
   else
     default['postgresql']['service_name'] = 'postgresql'
   end
-  default['postgresql']['client_packages'] = [ 'postgresql-client', 'libpq-dev' ]
-  default['postgresql']['server_packages'] = [ 'postgresql' ]
+  default['postgresql']['client_packages'] = [ "postgresql-client-#{node['postgresql']['version']}", 'libpq-dev' ]
+  default['postgresql']['server_packages'] = [ "postgresql-#{node['postgresql']['version']}" ]
 
 
 when 'redhat', 'centos', 'scientific'
