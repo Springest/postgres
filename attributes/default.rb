@@ -43,6 +43,7 @@ when 'debian'
   end
   default['postgresql']['client_packages'] = [ "postgresql-client-#{node['postgresql']['version']}", 'libpq-dev' ]
   default['postgresql']['server_packages'] = [ "postgresql-#{node['postgresql']['version']}" ]
+  default['postgresql']['contrib_packages'] = [ "postgresql-contrib-#{node['postgresql']['version']}" ]
 
 
 when 'ubuntu'
@@ -67,7 +68,7 @@ when 'ubuntu'
   end
   default['postgresql']['client_packages'] = [ "postgresql-client-#{node['postgresql']['version']}", 'libpq-dev' ]
   default['postgresql']['server_packages'] = [ "postgresql-#{node['postgresql']['version']}" ]
-
+  default['postgresql']['contrib_packages'] = [ "postgresql-contrib-#{node['postgresql']['version']}" ]
 
 when 'redhat', 'centos', 'scientific'
 
@@ -81,9 +82,11 @@ when 'redhat', 'centos', 'scientific'
   if node['platform_version'].to_f >= 6.0
     default['postgresql']['client_packages'] = [ 'postgresql-devel' ]
     default['postgresql']['server_packages'] = [ 'postgresql-server' ]
+    default['postgresql']['contrib_packages'] = [ 'postgresql-contrib' ]
   else
     default['postgresql']['client_packages'] = [ "postgresql#{node['postgresql']['version'].split('.').join}-devel" ]
     default['postgresql']['server_packages'] = [ "postgresql#{node['postgresql']['version'].split('.').join}-server" ]
+    default['postgresql']['contrib_packages'] = [ "postgresql#{node['postgresql']['version'].split('.').join}-contrib" ]
   end
 
 end
