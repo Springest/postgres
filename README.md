@@ -85,6 +85,20 @@ Setup certificates using the certificate cookbook (defaults to false)
     node['postgresql']['certificate'] = true # use the systems hostname as search_id
     node['postgresql']['certificate'] = 'db-staging-master'
 
+## postgis_package
+
+Installs postgis from packages. You can modify the default (postgis) using this attribute
+
+    node['postgis']['packages'] = 'postgis'
+
+## postgis_source
+
+Installs postgis from source, you can override the default version (2.0.1) using this attribute
+
+    node['postgis']['version'] = '2.0.1'
+
+Only tested on ubuntu so far.
+
 
 # Definitions
 
