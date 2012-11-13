@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgres
-# Recipe:: client
+# Recipe:: install_client
 #
 # Copyright 2012, Chris Aumann
 #
