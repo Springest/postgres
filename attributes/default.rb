@@ -90,29 +90,3 @@ when 'redhat', 'centos', 'scientific'
   end
 
 end
-
-
-# default postgresql.conf settings
-default['postgresql']['postgresql.conf'] = {
-  'max_connections' => 100,
-  'datestyle' => 'iso, mdy',
-  'lc_messages' => 'en_US.UTF-8',
-  'lc_monetary' => 'en_US.UTF-8',
-  'lc_numeric' => 'en_US.UTF-8',
-  'lc_time' => 'en_US.UTF-8',
-  'default_text_search_config' => 'pg_catalog.english',
-  'log_line_prefix' => '%t [%p] %u@%d ',
-  'data_directory' => node['postgresql']['data_dir']
-}
-
-# default pg_hba.conf settings
-default['postgresql']['pg_hba.conf'] =  [ 'local all postgres trust' ]
-
-# default pg_ident.conf settings
-default['postgresql']['pg_ident.conf'] = []
-
-# default recovery.conf settings
-default['postgresql']['recovery.conf'] = {}
-
-# per default, don't use ssl certificates
-default['postgresql']['certificate'] = false
