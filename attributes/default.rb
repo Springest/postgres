@@ -90,3 +90,6 @@ when 'redhat', 'centos', 'scientific'
   end
 
 end
+
+# per default, don't use ssl certificates
+default['postgresql']['certificate'] = false

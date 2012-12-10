@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgresql
-# Library:: helpers
+# Resource:: config
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,26 +18,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-module Postgresql
-  module Helpers
+actions        :create, :delete
+default_action :create
 
-    # delete all template attributes chef knows from all_attr
-    # and return them in a seperate hash
-    def extract_template_attributes(all_attr)
-      # all template attributes chef knows
-      t_attr = [ :name, :action, :backup, :cookbook, :path, :source,
-                 :group, :mode, :inherits, :owner, :variables, :local ]
-      o_attr = {}
-      t_attr.each { |attr| o_attr[attr] = all_attr.delete(attr) if all_attr[attr] }
-      o_attr
-    end
-
-    # merge d (defaults) with new hash (n)
-    def merge_settings(d, n)
-      r = d.to_hash
-      n.each { |k, v| r[k.to_s] = v }
-      r
-    end
-
-  end
-end
+attribute :name,      :kind_of => String, :name_attribute => true
+attribute :cookbook,  :kind_of => String, :default => 'postgresql'
+attribute :source,    :kind_of => String, :default => 'postgresql.conf.erb'
+attribute :variables, :kind_of => Hash,   :default => {}

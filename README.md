@@ -44,7 +44,7 @@ Default postgresql settings
 
 Default pg_hba setting
 
-    local all postgres trust
+    local all postgres peer
 
 
 # Recipes
@@ -59,26 +59,16 @@ Installs postgres client tools.
 
 ## install_server
 
-Installs server packages, sets up configuration and data directories, enables service
+Installs postgres server packages.
+
+## install_client
+
+Installs postgres contrib packages.
+
 
 ## default_server
 
 Installs postgres server, configuring it using default settings.
-
-You can override the default settings using node/role attributes.
-Your new settings will be merged with the default parameters.
-All postgresql.conf parameters are supported
-
-    node['postgresql']['postgresql.conf']['max_connections'] = 100
-
-You can specify your pg_hba.conf and pg_ident.conf settings as well (below are the defaults)
-
-    node['postgresql']['pg_hba.conf'] = [ 'local all postgres trust']
-    node['postgresql']['pg_ident.conf'] = []
-
-Configure a recovery.conf for postgres slaves (default is empty)
-
-    node['postgresql']['recovery.conf']['primary_conninfo'] = 'host=localhost port=5432'
 
 Setup certificates using the certificate cookbook (defaults to false)
 
@@ -100,40 +90,30 @@ Installs postgis from source, you can override the default version (2.0.1) using
 Only tested on ubuntu so far.
 
 
-# Definitions
+# Providers
 
-To use the definitions in your cookbook, add the following line to your manifest.rb
+To use the providers in your cookbook, add the following line to your manifest.rb
 
     depends "postgresql"
 
-## pg_conf
+## postgresql_config
 
 This definition sets up postgresql.conf in (unless overridden by "path") postgresql configuration directory.
 
 Setup postgresql configuration using the defaults.
 
-    pg_conf 'postgresql.conf'
+    postgresql_config 'postgresql.conf'
 
-Setup postgresql configuration, merging default values with additional settings. All settings for postgresql.conf are supported.
+You can specify your own templates
 
-    pg_conf 'postgresql.conf' do
-      max_connections              100
-      data_dir                     '/tmp'
-      autovacuum                   'on'
-      autovacuum_vacuum_cost_delay '5ms'
-      autovacuum_vacuum_cost_limit 200
-    end
-
-You can specify your own templates as well
-
-    pg_conf 'postgresql.conf' do
+    postgresql_config 'postgresql.conf' do
       cookbook 'mycookbook'
       source   'mytemplate.erb'
     end
 
 Owner, group, mode and path will be set automatically according to your distribution. You can override the settings though
 
-    pg_conf 'postgresql.conf' do
+    postgresql_config 'postgresql.conf' do
       path  '/path/to/postgresql.conf'
       mode  '0600'
       owner 'mypostgresuser'
@@ -143,37 +123,53 @@ Owner, group, mode and path will be set automatically according to your distribu
 The postgresql service will be restarted automatically if needed.
 
 
-## pg_certificate
+## postgresql_certificate
 
 Installs a certificate using the certificate cookbook.
 
-    pg_certificate node['hostname']
+    postgresql_certificate node['hostname']
 
-    pg_certificate 'db-staging-master' do
-      cert_path
-      owner
-      group
+You can override the defaults if needed
+
+    postgresql_certificate 'db-staging-master' do
+      cert_path '/my/path/mycert.crt'
+      owner     'postgres'
+      group     'postgres'
     end
 
-## pg_hba
+## postgresql_hba
 
 This definition sets up pg_hba.conf in (unless overridden by "path") postgresql configuration directory.
 
-The default configuration uses a single rule (local all postgres trust)
+The default configuration uses a single rule (local all postgres peer)
 
-    pg_hba 'pg_hba.conf'
+    postgresql_hba 'pg_hba.conf'
 
-You can specify your own
+Or use your own template
 
-    pg_hba 'pg_hba.conf' do
-      rules 'local all postgres trust'
+    postgresql_hba 'pg_hba.conf' do
+      cookbook 'mycookbook'
+      source   'mytemplate.erb'
     end
 
-Multiple rules are supported using arrays
 
-    pg_hba 'pg_hba.conf' do
-      rules [ 'local all  postgres trust',
-              'local mydb myuser   password' ]
+## postgresql_ident
+
+Sets up the pg_ident.conf analog to the postgresql_hba provider.
+
+## postgresql_recovery
+
+Maintains your recovery.conf (only deploying it to slaves)
+
+This definition sets up pg_hba.conf in (unless overridden by "path") postgresql configuration directory.
+
+Deploy an empty recovery.conf (not very useful)
+
+    postgresql_recovery 'recovery.conf'
+
+Better use your own template
+
+    postgresql_recovery 'recovery.conf' do
+      cookbook 'mycookbook'
+      source   'mytemplate.erb'
     end
-
-Additional settings like cookbook, template, owner are supported as well see the pg_conf definition for examples.

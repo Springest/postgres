@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: postgres
-# Recipe:: install_server
+# Cookbook Name:: postgresql
+# Provider:: recovery
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,19 +18,31 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# install packages
-node['postgresql']['server_packages'].each { |pkg| package pkg }
+action :create do
+  service 'postgresql' do
+    service_name node['postgresql']['service_name']
+    supports :restart => true, :status => true, :reload => true
+    action   :nothing
+  end
 
-unless node['postgresql']['conf_dir'] == node['postgresql']['data_dir']
-  directory node['postgresql']['conf_dir'] do
+  path = "#{node['postgresql']['data_dir']}/recovery.conf"
+
+  # check if this node is a postgres slave
+  is_slave = ::File.exists? path
+
+  # use .done as file extension, if this node is a postgres master
+  path.sub!(/\.[^\.]+$/, '.done') unless is_slave
+
+  template 'pg_ident.conf' do
+    path      path
+    mode      '0644'
     owner     node['postgresql']['db_user']
     group     node['postgresql']['db_group']
-    mode      '0755'
-  end
-end
 
-directory node['postgresql']['data_dir'] do
-  owner     node['postgresql']['db_user']
-  group     node['postgresql']['db_group']
-  mode      '0700'
+    cookbook  new_resource.cookbook
+    source    new_resource.source
+    variables new_resource.variables
+
+    notifies  :reload, resources(:service => 'postgresql') if is_slave
+  end
 end

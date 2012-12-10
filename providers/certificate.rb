@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgresql
-# Definition:: pg_certificate
+# Provider:: certificate
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,31 +18,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-class Chef::Recipe
-  include Postgresql::Helpers
-end
+action :create do
+  service 'postgresql' do
+    service_name node['postgresql']['service_name']
+    supports :restart => true, :status => true, :reload => true
+    action   :nothing
+  end
 
-
-define :pg_certificate, :action => :create do
-  include_recipe 'postgresql::install_server'
-
-  # use defaults unless overridden
-  params[:cert_path] ||= node['postgresql']['data_dir']
-  params[:owner] ||= node['postgresql']['db_user']
-  params[:group] ||= node['postgresql']['db_group']
-
-  certificate_manage params[:name] do
-    cert_path       params[:cert_path]
-    owner           params[:owner]
-    group           params[:group]
+  certificate_manage new_resource.name do
+    cert_path       node['postgresql']['data_dir']
+    owner           node['postgresql']['db_user']
+    group           node['postgresql']['db_group']
     key_file        'server.key'
     cert_file       'server.crt'
 
-    data_bag        params[:data_bag]        if params[:data_bag]
-    data_bag_secret params[:data_bag_secret] if params[:data_bag_secret]
-    cookbook        params[:cookbook]        if params[:cookbook]
+    data_bag        new_resource.data_bag        if new_resource.data_bag
+    data_bag_secret new_resource.data_bag_secret if new_resource.data_bag_secret
+    cookbook        new_resource.cookbook        if new_resource.cookbook
 
-    action          params[:action]
     notifies        :restart, resources(:service => 'postgresql')
   end
 end

@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: postgres
-# Recipe:: install_server
+# Cookbook Name:: postgresql
+# Resource:: certificate
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,19 +18,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# install packages
-node['postgresql']['server_packages'].each { |pkg| package pkg }
+actions        :create, :delete
+default_action :create
 
-unless node['postgresql']['conf_dir'] == node['postgresql']['data_dir']
-  directory node['postgresql']['conf_dir'] do
-    owner     node['postgresql']['db_user']
-    group     node['postgresql']['db_group']
-    mode      '0755'
-  end
-end
-
-directory node['postgresql']['data_dir'] do
-  owner     node['postgresql']['db_user']
-  group     node['postgresql']['db_group']
-  mode      '0700'
-end
+attribute :name,            :kind_of => String, :name_attribute => true
+attribute :data_bag,        :kind_of => String, :default => nil
+attribute :data_bag_secret, :kind_of => String, :default => nil
+attribute :cookbook,        :kind_of => String, :default => 'certificate'
