@@ -36,6 +36,6 @@ action :create do
     data_bag_secret new_resource.data_bag_secret if new_resource.data_bag_secret
     cookbook        new_resource.cookbook        if new_resource.cookbook
 
-    notifies        :restart, resources(:service => 'postgresql')
+    notifies        :restart, resources(:service => 'postgresql'), :immediately
   end
 end
