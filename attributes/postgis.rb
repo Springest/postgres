@@ -19,7 +19,7 @@
 #
 include_attribute 'postgresql::default'
 
-default['postgis']['version'] = '2.0.1'
+default['postgis']['version'] = '2.0.2'
 
 case platform
 when 'ubuntu', 'debian'
