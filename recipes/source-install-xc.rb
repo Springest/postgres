@@ -81,14 +81,14 @@ node.set['postgres']['contrib_dir'] = "#{node['postgres']['xc']['prefix']}/share
 node.set['postgres']['xc']['enabled'] = true
 
 
-# deploy init script
-template '/etc/init.d/postgres-xc' do
-  cookbook 'postgres'
-  source   'postgres-xc.init.erb'
-  mode     '0755'
-  # variables :logfile =>
-  #           :conf_dir =>
-end
+# # deploy init script
+# template '/etc/init.d/postgres-xc' do
+#   cookbook 'postgres'
+#   source   'postgres-xc.init.erb'
+#   mode     '0755'
+#   # variables :logfile =>
+#   #           :conf_dir =>
+# end
 
 # install logrotate rules
 # logrotate_app 'postgres-xc' do
