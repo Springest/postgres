@@ -33,7 +33,7 @@ if node.platform == 'ubuntu'
   package 'libgdal1-dev'
 
   # don't install server-dev package when using postgres-xc
-  package "postgresql-server-dev-#{node['postgresql']['version']}" unless node['postgresql']['xc']['enabled']
+  package "postgresql-server-dev-#{node['postgres']['version']}" unless node['postgres']['xc']['enabled']
 end
 
 def install_postgis
@@ -66,4 +66,4 @@ def install_postgis
 end
 
 # consider postgis installed if postgis-x.x exists in the contrib folder
-install_postgis unless ::File.directory? "#{node['postgresql']['contrib_dir']}/postgis-#{node['postgis']['version'].slice(/^\d+\.\d+/)}"
+install_postgis unless ::File.directory? "#{node['postgres']['contrib_dir']}/postgis-#{node['postgis']['version'].slice(/^\d+\.\d+/)}"

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: postgresql
+# Cookbook Name:: postgres
 # Provider:: certificate
 #
 # Copyright 2012, Chris Aumann
@@ -20,15 +20,15 @@
 
 action :create do
   service 'postgresql' do
-    service_name node['postgresql']['service_name']
+    service_name node['postgres']['service_name']
     supports :restart => true, :status => true, :reload => true
     action   :nothing
   end
 
   certificate_manage new_resource.name do
-    cert_path  node['postgresql']['data_dir']
-    owner      node['postgresql']['user']['name']
-    group      node['postgresql']['user']['group']
+    cert_path  node['postgres']['data_dir']
+    owner      node['postgres']['user']['name']
+    group      node['postgres']['user']['group']
     key_file   'server.key'
     cert_file  'server.crt'
 

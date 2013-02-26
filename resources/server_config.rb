@@ -1,6 +1,5 @@
 #
-# Cookbook Name:: postgresql
-# Resource:: server_config
+# Cookbook Name:: postgres
 #
 # Copyright 2012, Chris Aumann
 #
@@ -22,6 +21,6 @@ actions        :create, :delete
 default_action :create
 
 attribute :name,      :kind_of => String, :name_attribute => true
-attribute :cookbook,  :kind_of => String, :default => 'postgresql'
+attribute :cookbook,  :kind_of => String, :default => 'postgres'
 attribute :source,    :kind_of => String, :default => 'postgresql.conf.erb'
 attribute :variables, :kind_of => Hash,   :default => {}

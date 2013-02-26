@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-include_attribute 'postgresql::default'
+include_attribute 'postgres::default'
 
 default['postgis']['version'] = '2.0.2'
 default['postgis']['url'] = "http://download.osgeo.org/postgis/source/postgis-#{node['postgis']['version']}.tar.gz"
@@ -26,7 +26,7 @@ default['postgis']['pg_config'] = '/usr/bin/pg_config'
 
 case platform
 when 'ubuntu', 'debian'
-  default['postgis']['packages'] = [ 'postgis', "postgresql-#{node['postgresql']['version']}-postgis" ]
+  default['postgis']['packages'] = [ 'postgis', "postgresql-#{node['postgres']['version']}-postgis" ]
 else
   default['postgis']['packages'] = 'postgis'
 end

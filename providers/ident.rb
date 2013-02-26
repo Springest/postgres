@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: postgresql
+# Cookbook Name:: postgres
 # Provider:: ident
 #
 # Copyright 2012, Chris Aumann
@@ -20,16 +20,16 @@
 
 action :create do
   service 'postgresql' do
-    service_name node['postgresql']['service_name']
+    service_name node['postgres']['service_name']
     supports :restart => true, :status => true, :reload => true
     action   :nothing
   end
 
   template 'pg_ident.conf' do
-    path      "#{node['postgresql']['conf_dir']}/pg_ident.conf"
+    path      "#{node['postgres']['conf_dir']}/pg_ident.conf"
     mode      '0640'
-    owner     node['postgresql']['user']['name']
-    group     node['postgresql']['user']['group']
+    owner     node['postgres']['user']['name']
+    group     node['postgres']['user']['group']
 
     cookbook  new_resource.cookbook
     source    new_resource.source

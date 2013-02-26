@@ -18,20 +18,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-include_recipe 'postgresql::pkg-install-server'
+include_recipe 'postgres::pkg-install-server'
 
 postgresql_config 'postgresql.conf'
 postgresql_hba 'pg_hba.conf'
 
 # deploy certificates if configured
-if node['postgresql']['certificate']
+if node['postgres']['certificate']
 
   # by default, use the certificate for this hostname
-  if node['postgresql']['certificate'].to_s == 'true'
+  if node['postgres']['certificate'].to_s == 'true'
     postgresql_certificate node['hostname']
 
   # if specified, use certificate name
   else
-    postgresql_certificate node['postgresql']['certificate']
+    postgresql_certificate node['postgres']['certificate']
   end
 end

@@ -1,6 +1,6 @@
 # Description
 
-This cookbook was inspired by [https://github.com/opscode-cookbooks/postgresql](https://github.com/opscode-cookbooks/postgresql).
+This cookbook was inspired by [https://github.com/opscode-cookbooks/postgres](https://github.com/opscode-cookbooks/postgres).
 
 <EXPLAIN DIFFERENCES>
 
@@ -8,29 +8,29 @@ This cookbook was inspired by [https://github.com/opscode-cookbooks/postgresql](
 
 Postgres version to install (tries using the highest available version for your distribution by default)
 
-    node['postgresql']['version']
+    node['postgres']['version']
 
 Packages to install (uses sane defaults for each distribution according to the specified version)
 
-    node['postgresql']['client_packages']
-    node['postgresql']['server_packages']
+    node['postgres']['client_packages']
+    node['postgres']['server_packages']
 
 User the postgres service runs as (defaults to the default of your distribution)
 
-    node['postgresql']['user']['name']
-    node['postgresql']['user']['home']
+    node['postgres']['user']['name']
+    node['postgres']['user']['home']
 
 Configuration and data directories (defaults to the default of your distribution)
 
-    node['postgresql']['conf_dir']
-    node['postgresql']['data_dir']
+    node['postgres']['conf_dir']
+    node['postgres']['data_dir']
 
 Service name (defaults to the default of your distribution)
 
-    node['postgresql']['service_name']
+    node['postgres']['service_name']
 
 
-Default postgresql settings
+Default postgres settings
 
     max_connections 100,
     datestyle 'iso, mdy',
@@ -40,7 +40,7 @@ Default postgresql settings
     lc_time 'en_US.UTF-8',
     default_text_search_config  'pg_catalog.english',
     log_line_prefix '%t [%p] %u@%d ',
-    data_directory  node['postgresql']['data_dir']
+    data_directory  node['postgres']['data_dir']
 
 Default pg_hba setting
 
@@ -72,8 +72,8 @@ Installs postgres server, configuring it using default settings.
 
 Setup certificates using the certificate cookbook (defaults to false)
 
-    node['postgresql']['certificate'] = true # use the systems hostname as search_id
-    node['postgresql']['certificate'] = 'db-staging-master'
+    node['postgres']['certificate'] = true # use the systems hostname as search_id
+    node['postgres']['certificate'] = 'db-staging-master'
 
 ## postgis_package
 
@@ -94,7 +94,7 @@ Only tested on ubuntu so far.
 
 To use the providers in your cookbook, add the following line to your manifest.rb
 
-    depends "postgresql"
+    depends "postgres"
 
 ## postgresql_config
 
@@ -102,74 +102,74 @@ This definition sets up postgresql.conf in (unless overridden by "path") postgre
 
 Setup postgresql configuration using the defaults.
 
-    postgresql_config 'postgresql.conf'
+    postgres_server_config 'postgresql.conf'
 
 You can specify your own templates
 
-    postgresql_config 'postgresql.conf' do
+    postgres_server_config 'postgresql.conf' do
       cookbook 'mycookbook'
       source   'mytemplate.erb'
     end
 
 Owner, group, mode and path will be set automatically according to your distribution. You can override the settings though
 
-    postgresql_config 'postgresql.conf' do
+    postgres_server_config 'postgresql.conf' do
       path  '/path/to/postgresql.conf'
       mode  '0600'
       owner 'mypostgresuser'
       group 'mypostgresgroup'
     end
 
-The postgresql service will be restarted automatically if needed.
+The postgres service will be restarted automatically if needed.
 
 
-## postgresql_certificate
+## postgres_certificate
 
 Installs a certificate using the certificate cookbook.
 
-    postgresql_certificate node['hostname']
+    postgres_certificate node['hostname']
 
 You can override the defaults if needed
 
-    postgresql_certificate 'db-staging-master' do
+    postgres_certificate 'db-staging-master' do
       cert_path '/my/path/mycert.crt'
       owner     'postgres'
       group     'postgres'
     end
 
-## postgresql_hba
+## postgres_hba
 
-This definition sets up pg_hba.conf in (unless overridden by "path") postgresql configuration directory.
+This definition sets up pg_hba.conf in (unless overridden by "path") postgres configuration directory.
 
 The default configuration uses a single rule (local all postgres peer)
 
-    postgresql_hba 'pg_hba.conf'
+    postgres_hba 'pg_hba.conf'
 
 Or use your own template
 
-    postgresql_hba 'pg_hba.conf' do
+    postgres_hba 'pg_hba.conf' do
       cookbook 'mycookbook'
       source   'mytemplate.erb'
     end
 
 
-## postgresql_ident
+## postgres_ident
 
-Sets up the pg_ident.conf analog to the postgresql_hba provider.
+Sets up the pg_ident.conf analog to the postgres_hba provider.
 
-## postgresql_recovery
+## postgres_recovery
 
 Maintains your recovery.conf (only deploying it to slaves)
 
-This definition sets up pg_hba.conf in (unless overridden by "path") postgresql configuration directory.
+This definition sets up pg_hba.conf in (unless overridden by "path") postgres configuration directory.
 
 Deploy an empty recovery.conf (not very useful)
 
-    postgresql_recovery 'recovery.conf'
+    postgres_recovery 'recovery.conf'
 
 Better use your own template
 
-    postgresql_recovery 'recovery.conf' do
+    postgres_recovery 'recovery.conf' do
       cookbook 'mycookbook'
       source   'mytemplate.erb'
     end

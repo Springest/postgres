@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: postgresql
+# Cookbook Name:: postgres
 # Provider:: xc_gtm
 #
 # Copyright 2012, Chris Aumann

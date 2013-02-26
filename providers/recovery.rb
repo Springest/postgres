@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: postgresql
+# Cookbook Name:: postgres
 # Provider:: recovery
 #
 # Copyright 2012, Chris Aumann
@@ -20,12 +20,12 @@
 
 action :create do
   service 'postgresql' do
-    service_name node['postgresql']['service_name']
+    service_name node['postgres']['service_name']
     supports :restart => true, :status => true, :reload => true
     action   :nothing
   end
 
-  path = "#{node['postgresql']['data_dir']}/recovery.conf"
+  path = "#{node['postgres']['data_dir']}/recovery.conf"
 
   # check if this node is a postgres slave
   is_slave = ::File.exists? path
@@ -36,8 +36,8 @@ action :create do
   template 'pg_ident.conf' do
     path      path
     mode      '0644'
-    owner     node['postgresql']['user']['name']
-    group     node['postgresql']['user']['group']
+    owner     node['postgres']['user']['name']
+    group     node['postgres']['user']['group']
 
     cookbook  new_resource.cookbook
     source    new_resource.source

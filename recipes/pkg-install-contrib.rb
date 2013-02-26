@@ -18,4 +18,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-node['postgresql']['contrib_packages'].each { |pkg| package pkg }
+node['postgres']['contrib_packages'].each { |pkg| package pkg }

@@ -18,19 +18,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-node['postgresql']['server_packages'].each { |pkg| package pkg }
+node['postgres']['server_packages'].each { |pkg| package pkg }
 
-directory node['postgresql']['conf_dir'] do
-  owner     node['postgresql']['user']['name']
-  group     node['postgresql']['user']['group']
+directory node['postgres']['conf_dir'] do
+  owner     node['postgres']['user']['name']
+  group     node['postgres']['user']['group']
   mode      '0755'
   recursive true
-  not_if  { node['postgresql']['conf_dir'] == node['postgresql']['data_dir'] }
+  not_if  { node['postgres']['conf_dir'] == node['postgres']['data_dir'] }
 end
 
-directory node['postgresql']['data_dir'] do
-  owner     node['postgresql']['user']['name']
-  group     node['postgresql']['user']['group']
+directory node['postgres']['data_dir'] do
+  owner     node['postgres']['user']['name']
+  group     node['postgres']['user']['group']
   mode      '0700'
   recursive true
 end

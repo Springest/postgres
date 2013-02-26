@@ -18,12 +18,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-default['postgresql']['xc']['enabled'] = false
-default['postgresql']['xc']['version'] = '1.0.2'
-default['postgresql']['xc']['url'] = "http://garr.dl.sourceforge.net/project/postgres-xc/Version_1.0/pgxc-v#{node['postgresql']['xc']['version']}.tar.gz"
+default['postgres']['xc']['enabled'] = false
+default['postgres']['xc']['version'] = '1.0.2'
+default['postgres']['xc']['url'] = "http://garr.dl.sourceforge.net/project/postgres-xc/Version_1.0/pgxc-v#{node['postgres']['xc']['version']}.tar.gz"
 
-default['postgresql']['xc']['postgis']['version'] = '2.0.2'
-default['postgresql']['xc']['postgis']['patch'] = 'http://www.stormdb.com/sites/default/files/downloads/postgis_xc.patch'
-default['postgresql']['xc']['postgis']['url']
+default['postgres']['xc']['postgis']['version'] = '2.0.2'
+default['postgres']['xc']['postgis']['patch'] = 'http://www.stormdb.com/sites/default/files/downloads/postgis_xc.patch'
+default['postgres']['xc']['postgis']['url']
 
-default['postgresql']['xc']['prefix'] = '/opt/postgres-xc'
+default['postgres']['xc']['prefix'] = '/opt/postgres-xc'

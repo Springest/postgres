@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: postgresql
+# Cookbook Name:: postgres
 # Resource:: certificate
 #
 # Copyright 2012, Chris Aumann

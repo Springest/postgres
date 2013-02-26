@@ -18,4 +18,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-include_recipe 'postgresql::pkg-install-client'
+include_recipe 'postgres::pkg-install-client'
