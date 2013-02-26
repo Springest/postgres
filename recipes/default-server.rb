@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgres
-# Recipe:: postgis_package
+# Recipe:: default_server
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,4 +18,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-node['postgis']['packages'].each { |pkg| package pkg }
+include_recipe 'postgresql::pkg-install-server'
+
+postgresql_config 'postgresql.conf'
+postgresql_hba 'pg_hba.conf'
+
+# deploy certificates if configured
+if node['postgresql']['certificate']
+
+  # by default, use the certificate for this hostname
+  if node['postgresql']['certificate'].to_s == 'true'
+    postgresql_certificate node['hostname']
+
+  # if specified, use certificate name
+  else
+    postgresql_certificate node['postgresql']['certificate']
+  end
+end

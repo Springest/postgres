@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgres
-# Recipe:: postgis_source
+# Recipe:: source-install-postgis
 #
 # Copyright 2012, Chris Aumann
 #

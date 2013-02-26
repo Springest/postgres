@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: postgresql
-# Provider:: install_source
+# Cookbook Name:: postgres
+# Recipe:: pkg-install-client
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,18 +18,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-action :create do
-  unless node['postgresql']['conf_dir'] == node['postgresql']['data_dir']
-    directory node['postgresql']['conf_dir'] do
-      owner     node['postgresql']['db_user']
-      group     node['postgresql']['db_group']
-      mode      '0755'
-    end
-  end
-
-  directory node['postgresql']['data_dir'] do
-    owner     node['postgresql']['db_user']
-    group     node['postgresql']['db_group']
-    mode      '0700'
-  end
-end
+node['postgresql']['client_packages'].each { |pkg| package pkg }

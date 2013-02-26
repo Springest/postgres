@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgres
-# Recipe:: install_server
+# Recipe:: source-install-server
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,8 +18,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# install packages
-node['postgresql']['server_packages'].each { |pkg| package pkg }
+# TODO
+# install from source
+
 
 unless node['postgresql']['conf_dir'] == node['postgresql']['data_dir']
   directory node['postgresql']['conf_dir'] do

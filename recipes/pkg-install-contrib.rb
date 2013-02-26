@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgres
-# Recipe:: default_server
+# Recipe:: pkg-install-contrib
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,18 +18,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-postgresql_config 'postgresql.conf'
-postgresql_hba 'pg_hba.conf'
-
-# deploy certificates if configured
-if node['postgresql']['certificate']
-
-  # by default, use the certificate for this hostname
-  if node['postgresql']['certificate'].to_s == 'true'
-    postgresql_certificate node['hostname']
-
-  # if specified, use certificate name
-  else
-    postgresql_certificate node['postgresql']['certificate']
-  end
-end
+node['postgresql']['contrib_packages'].each { |pkg| package pkg }
