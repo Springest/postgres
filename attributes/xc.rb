@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: postgresql
-# Provider:: config
+# Cookbook Name:: postgres
+# Attributes:: xc
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,23 +18,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-action :create do
-  service 'postgresql' do
-    service_name node['postgresql']['service_name']
-    supports :restart => true, :status => true, :reload => true
-    action   :enable
-  end
+default['postgresql']['xc']['enabled'] = false
+default['postgresql']['xc']['version'] = '1.0.2'
+default['postgresql']['xc']['url'] = "http://garr.dl.sourceforge.net/project/postgres-xc/Version_1.0/pgxc-v#{node['postgresql']['xc']['version']}.tar.gz"
 
-  template 'postgresql.conf' do
-    path      "#{node['postgresql']['conf_dir']}/postgresql.conf"
-    mode      '0640'
-    owner     node['postgresql']['db_user']
-    group     node['postgresql']['db_group']
+default['postgresql']['xc']['postgis']['version'] = '2.0.2'
+default['postgresql']['xc']['postgis']['patch'] = 'http://www.stormdb.com/sites/default/files/downloads/postgis_xc.patch'
+default['postgresql']['xc']['postgis']['url']
 
-    cookbook  new_resource.cookbook
-    source    new_resource.source
-    variables new_resource.variables
-
-    notifies  :reload, resources(:service => 'postgresql'), :immediately
-  end
-end
+default['postgresql']['xc']['prefix'] = '/opt/postgres-xc'

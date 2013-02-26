@@ -36,6 +36,7 @@ when 'debian'
   default['postgresql']['db_group'] = 'postgres'
   default['postgresql']['conf_dir'] = "/etc/postgresql/#{node['postgresql']['version']}/main"
   default['postgresql']['data_dir'] = "/var/lib/postgresql/#{node['postgresql']['version']}/main"
+  default['postgresql']['contrib_dir'] = "/usr/share/postgresql/#{node['postgresql']['version']}/contrib"
   if platform_version.to_f <= 5.0
     default['postgresql']['service_name'] = "postgresql-#{node['postgresql']['version']}"
   else
@@ -61,6 +62,7 @@ when 'ubuntu'
   default['postgresql']['db_group'] = 'postgres'
   default['postgresql']['conf_dir'] = "/etc/postgresql/#{node['postgresql']['version']}/main"
   default['postgresql']['data_dir'] = "/var/lib/postgresql/#{node['postgresql']['version']}/main"
+  default['postgresql']['contrib_dir'] = "/usr/share/postgresql/#{node['postgresql']['version']}/contrib"
   if platform_version.to_f <= 10.04
     default['postgresql']['service_name'] = "postgresql-#{node['postgresql']['version']}"
   else
@@ -77,6 +79,7 @@ when 'redhat', 'centos', 'scientific'
   default['postgresql']['db_group'] = 'postgres'
   default['postgresql']['conf_dir'] = '/var/lib/pgsql/data'
   default['postgresql']['data_dir'] = '/var/lib/pgsql/data'
+  default['postgresql']['contrib_dir'] = "/usr/share/pgsql/contrib"
   default['postgresql']['service_name'] = 'postgresql'
 
   if node['platform_version'].to_f >= 6.0

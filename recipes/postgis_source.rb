@@ -18,11 +18,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+package 'curl'
+
 # install required packages (ubuntu)
 if node.platform == 'ubuntu'
   package 'wget'
   package 'build-essential'
-  package "postgresql-server-dev-#{node['postgresql']['version']}"
   package 'libpq-dev'
   package 'libxml2-dev'
   package 'libproj-dev'
@@ -30,25 +31,39 @@ if node.platform == 'ubuntu'
 
   # gdal has a lot of dependencies (e.g. mysql-common)
   package 'libgdal1-dev'
+
+  # don't install server-dev package when using postgres-xc
+  package "postgresql-server-dev-#{node['postgresql']['version']}" unless node['postgresql']['xc']['enabled']
 end
 
+def install_postgis
+  tmpdir = %x[mktemp -d].chomp
 
-script "download, compile and install postgis-#{node['postgis']['version']}" do
-  interpreter 'bash'
-  user 'root'
-  cwd '/tmp'
-  code <<-EOH
-    rm -rf postgis-#{node['postgis']['version']}.tar.gz
-    wget http://download.osgeo.org/postgis/source/postgis-#{node['postgis']['version']}.tar.gz
-    tar xvzf postgis-#{node['postgis']['version']}.tar.gz
-    cd postgis-#{node['postgis']['version']}
-    ./configure
-    make
-    make install
-    cd ..
-    rm -rf postgis-#{node['postgis']['version']} postgis-#{node['postgis']['version']}.tar.gz
-  EOH
+  execute "downloading postgis-#{node['postgis']['version']}" do
+    cwd tmpdir
+    command "curl #{node['postgis']['url']} |tar -zxf -"
+  end
 
-  # consider postgis installed if postgis-x.x exists in the contrib folder
-  not_if "test -d /usr/share/postgresql/#{node['postgresql']['version']}/contrib/postgis-#{node['postgis']['version'].slice(/^\d+\.\d+/)}"
+  execute "configuring postgis-#{node['postgis']['version']}" do
+    cwd "#{tmpdir}/postgis-#{node['postgis']['version']}"
+    command "./configure --with-pgconfig=#{node['postgis']['pg_config']}"
+  end
+
+  execute "compiling postgis-#{node['postgis']['version']}" do
+    cwd "#{tmpdir}/postgis-#{node['postgis']['version']}"
+    command 'make'
+  end
+
+  execute "installing postgis-#{node['postgis']['version']}" do
+    cwd "#{tmpdir}/postgis-#{node['postgis']['version']}"
+    command 'make install'
+  end
+
+  directory tmpdir do
+    action :delete
+    recursive true
+  end
 end
+
+# consider postgis installed if postgis-x.x exists in the contrib folder
+install_postgis unless ::File.directory? "#{node['postgresql']['contrib_dir']}/postgis-#{node['postgis']['version'].slice(/^\d+\.\d+/)}"

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgresql
-# Provider:: config
+# Provider:: install_source
 #
 # Copyright 2012, Chris Aumann
 #
@@ -19,22 +19,17 @@
 #
 
 action :create do
-  service 'postgresql' do
-    service_name node['postgresql']['service_name']
-    supports :restart => true, :status => true, :reload => true
-    action   :enable
+  unless node['postgresql']['conf_dir'] == node['postgresql']['data_dir']
+    directory node['postgresql']['conf_dir'] do
+      owner     node['postgresql']['db_user']
+      group     node['postgresql']['db_group']
+      mode      '0755'
+    end
   end
 
-  template 'postgresql.conf' do
-    path      "#{node['postgresql']['conf_dir']}/postgresql.conf"
-    mode      '0640'
+  directory node['postgresql']['data_dir'] do
     owner     node['postgresql']['db_user']
     group     node['postgresql']['db_group']
-
-    cookbook  new_resource.cookbook
-    source    new_resource.source
-    variables new_resource.variables
-
-    notifies  :reload, resources(:service => 'postgresql'), :immediately
+    mode      '0700'
   end
 end

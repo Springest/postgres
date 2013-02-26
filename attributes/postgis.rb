@@ -20,6 +20,8 @@
 include_attribute 'postgresql::default'
 
 default['postgis']['version'] = '2.0.2'
+default['postgis']['url'] = "http://download.osgeo.org/postgis/source/postgis-#{node['postgis']['version']}.tar.gz"
+default['postgis']['pg_config'] = '/usr/bin/pg_config'
 
 case platform
 when 'ubuntu', 'debian'
