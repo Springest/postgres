@@ -24,8 +24,6 @@ default['postgres']['xc']['url'] = "http://garr.dl.sourceforge.net/project/postg
 
 default['postgres']['xc']['postgis']['version'] = '2.0.2'
 default['postgres']['xc']['postgis']['patch'] = 'http://www.stormdb.com/sites/default/files/downloads/postgis_xc.patch'
-default['postgres']['xc']['postgis']['url']
 
 default['postgres']['xc']['prefix'] = '/opt/postgres-xc'
-
 default['postgres']['xc']['data_dir'] = node['postgres']['user']['home']
