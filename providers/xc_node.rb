@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgres
-# Provider:: xc_gtm
+# Provider:: xc_coordinator
 #
 # Copyright 2012, Chris Aumann
 #
@@ -21,17 +21,26 @@
 action :create do
   dir = "#{node['postgres']['xc']['data_dir']}/#{new_resource.nodename}"
 
-  execute "initgtm -D #{dir} -Z gtm" do
+  execute "initdb -D #{dir} --nodename #{new_resource.nodename}" do
     user    node['postgres']['user']['name']
-    creates "#{dir}/gtm.conf"
+    creates "#{dir}/postgresql.conf"
   end
 
-  template "#{dir}/gtm.conf" do
-    cookbook  'postgres'
-    source    'xc/gtm.conf.erb'
-    variables :nodename => new_resource.nodename,
-              :listen_addresses => new_resource.listen_addresses,
-              :port => new_resource.port,
-              :startup => new_resource.startup
+  template "#{dir}/postgresql.conf" do
+    cookbook  new_resource.cookbook
+    source    new_resource.source
+
+    if new_resource.variables.empty?
+      variables :nodename => new_resource.nodename,
+                :listen_addresses => new_resource.listen_addresses,
+                :port => new_resource.port,
+                :pooler_port => new_resource.pooler_port,
+                :gtm_host => new_resource.gtm_host,
+                :gtm_port => new_resource.gtm_port,
+                :max_connections => new_resource.max_connections,
+                :shared_buffers => new_resource.shared_buffers
+    else
+      variables new_resource.variables
+    end
   end
 end

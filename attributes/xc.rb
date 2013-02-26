@@ -27,3 +27,5 @@ default['postgres']['xc']['postgis']['patch'] = 'http://www.stormdb.com/sites/de
 default['postgres']['xc']['postgis']['url']
 
 default['postgres']['xc']['prefix'] = '/opt/postgres-xc'
+
+default['postgres']['xc']['data_dir'] = node['postgres']['user']['home']

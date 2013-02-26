@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgres
-# Provider:: xc_controller
+# Resource:: xc_gtm
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,5 +18,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-action :create do
-end
+actions        :create
+default_action :create
+
+attribute :nodename,         :kind_of => String, :name_attribute => true
+attribute :listen_addresses, :kind_of => String,  :default => '127.0.0.1'
+attribute :port,             :kind_of => Integer, :default => 6666
+attribute :startup,          :kind_of => String,  :default => 'ACT'
