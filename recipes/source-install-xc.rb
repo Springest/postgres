@@ -63,6 +63,19 @@ end
 
 install_postgres_xc unless ::File.directory?(node['postgres']['xc']['prefix'])
 
+# create symlinks to /usr/local/bin
+%w(
+  clusterdb createdb createlang createuser dropdb droplang dropuser
+  ecpg gtm gtm_ctl gtm_proxy initdb initgtm makesgml oid2name
+  pg_archivecleanup pg_basebackup pgbench pg_config pg_controldata
+  pg_ctl pg_dump pg_dumpall pg_resetxlog pg_restore pg_standby pg_test_fsync
+  pg_upgrade pgxc_clean postgres postmaster psql reindexdb vacuumdb vacuumlo
+).each do |bin|
+  link "/usr/local/bin/#{bin}" do
+    to "#{node['postgres']['xc']['prefix']}/bin/#{bin}"
+  end
+end
+
 node.set['postgis']['pg_config'] = "#{node['postgres']['xc']['prefix']}/bin/pg_config"
 node.set['postgres']['contrib_dir'] = "#{node['postgres']['xc']['prefix']}/share/contrib"
 node.set['postgres']['xc']['enabled'] = true
@@ -86,8 +99,7 @@ end
 # end
 
 
-# create user, group and directories
-
+# create user/group
 group node['postgres']['user']['group'] do
   system true
 end
@@ -102,19 +114,4 @@ directory node['postgres']['user']['home'] do
   owner     node['postgres']['user']['name']
   group     node['postgres']['user']['group']
   mode      '0755'
-end
-
-directory node['postgres']['conf_dir'] do
-  owner     node['postgres']['user']['name']
-  group     node['postgres']['user']['group']
-  mode      '0755'
-  recursive true
-  not_if  { node['postgres']['conf_dir'] == node['postgres']['data_dir'] }
-end
-
-directory node['postgres']['data_dir'] do
-  owner     node['postgres']['user']['name']
-  group     node['postgres']['user']['group']
-  mode      '0700'
-  recursive true
 end
