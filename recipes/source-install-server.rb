@@ -20,3 +20,36 @@
 
 # TODO
 # install from source
+
+# create user, group and directories
+
+group node['postgres']['user']['group'] do
+  system true
+end
+
+user node['postgres']['user']['name'] do
+  gid    node['postgres']['user']['group']
+  home   node['postgres']['user']['home']
+  system true
+end
+
+directory node['postgres']['user']['home'] do
+  owner     node['postgres']['user']['name']
+  group     node['postgres']['user']['group']
+  mode      '0755'
+end
+
+directory node['postgres']['conf_dir'] do
+  owner     node['postgres']['user']['name']
+  group     node['postgres']['user']['group']
+  mode      '0755'
+  recursive true
+  not_if  { node['postgres']['conf_dir'] == node['postgres']['data_dir'] }
+end
+
+directory node['postgres']['data_dir'] do
+  owner     node['postgres']['user']['name']
+  group     node['postgres']['user']['group']
+  mode      '0700'
+  recursive true
+end
