@@ -15,10 +15,10 @@ Packages to install (uses sane defaults for each distribution according to the s
     node['postgresql']['client_packages']
     node['postgresql']['server_packages']
 
-User and group the postgres user runs at (defaults to the default of your distribution)
+User the postgres service runs as (defaults to the default of your distribution)
 
-    node['postgresql']['db_user']
-    node['postgresql']['db_group']
+    node['postgresql']['user']['name']
+    node['postgresql']['user']['home']
 
 Configuration and data directories (defaults to the default of your distribution)
 

@@ -20,6 +20,7 @@
 
 # some default attributes stolen from
 # https://github.com/opscode-cookbooks/postgresql/blob/master/attributes/default.rb
+
 case platform
 when 'debian'
 
@@ -32,8 +33,9 @@ when 'debian'
     default['postgresql']['version'] = '9.1'
   end
 
-  default['postgresql']['db_user'] = 'postgres'
-  default['postgresql']['db_group'] = 'postgres'
+  default['postgresql']['user']['name'] = 'postgres'
+  default['postgresql']['user']['group'] = 'postgres'
+  default['postgresql']['user']['home'] = '/var/lib/postgresql'
   default['postgresql']['conf_dir'] = "/etc/postgresql/#{node['postgresql']['version']}/main"
   default['postgresql']['data_dir'] = "/var/lib/postgresql/#{node['postgresql']['version']}/main"
   default['postgresql']['contrib_dir'] = "/usr/share/postgresql/#{node['postgresql']['version']}/contrib"
@@ -58,8 +60,9 @@ when 'ubuntu'
     default['postgresql']['version'] = '9.1'
   end
 
-  default['postgresql']['db_user'] = 'postgres'
-  default['postgresql']['db_group'] = 'postgres'
+  default['postgresql']['user']['name'] = 'postgres'
+  default['postgresql']['user']['group'] = 'postgres'
+  default['postgresql']['user']['home'] = '/var/lib/postgresql'
   default['postgresql']['conf_dir'] = "/etc/postgresql/#{node['postgresql']['version']}/main"
   default['postgresql']['data_dir'] = "/var/lib/postgresql/#{node['postgresql']['version']}/main"
   default['postgresql']['contrib_dir'] = "/usr/share/postgresql/#{node['postgresql']['version']}/contrib"
@@ -75,8 +78,9 @@ when 'ubuntu'
 when 'redhat', 'centos', 'scientific'
 
   default['postgresql']['version'] = '8.4'
-  default['postgresql']['db_user'] = 'postgres'
-  default['postgresql']['db_group'] = 'postgres'
+  default['postgresql']['user']['name'] = 'postgres'
+  default['postgresql']['user']['group'] = 'postgres'
+  default['postgresql']['user']['home'] = '/var/lib/pgsql'
   default['postgresql']['conf_dir'] = '/var/lib/pgsql/data'
   default['postgresql']['data_dir'] = '/var/lib/pgsql/data'
   default['postgresql']['contrib_dir'] = "/usr/share/pgsql/contrib"
@@ -93,6 +97,7 @@ when 'redhat', 'centos', 'scientific'
   end
 
 end
+
 
 # per default, don't use ssl certificates
 default['postgresql']['certificate'] = false

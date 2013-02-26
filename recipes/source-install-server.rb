@@ -20,18 +20,3 @@
 
 # TODO
 # install from source
-
-
-unless node['postgresql']['conf_dir'] == node['postgresql']['data_dir']
-  directory node['postgresql']['conf_dir'] do
-    owner     node['postgresql']['db_user']
-    group     node['postgresql']['db_group']
-    mode      '0755'
-  end
-end
-
-directory node['postgresql']['data_dir'] do
-  owner     node['postgresql']['db_user']
-  group     node['postgresql']['db_group']
-  mode      '0700'
-end

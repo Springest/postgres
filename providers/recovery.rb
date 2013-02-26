@@ -36,8 +36,8 @@ action :create do
   template 'pg_ident.conf' do
     path      path
     mode      '0644'
-    owner     node['postgresql']['db_user']
-    group     node['postgresql']['db_group']
+    owner     node['postgresql']['user']['name']
+    group     node['postgresql']['user']['group']
 
     cookbook  new_resource.cookbook
     source    new_resource.source

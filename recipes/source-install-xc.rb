@@ -67,25 +67,54 @@ node.set['postgis']['pg_config'] = "#{node['postgresql']['xc']['prefix']}/bin/pg
 node.set['postgresql']['contrib_dir'] = "#{node['postgresql']['xc']['prefix']}/share/contrib"
 node.set['postgresql']['xc']['enabled'] = true
 
-# initscript
-# logrotate
 
-# xc-controller
-# xc-data
-# xc-gdm
-# xc-postgis
+# deploy init script
+template '/etc/init.d/postgres-xc' do
+  cookbook 'postgresql'
+  source   'postgres-xc.init.erb'
+  mode     '0755'
+  # variables :logfile =>
+  #           :conf_dir =>
+end
+
+# install logrotate rules
+# logrotate_app 'postgres-xc' do
+#   path '/var/log/postgres-xc/*.log'
+#   options [ 'missingok', 'notifempty', 'copytruncate', 'compress' ]
+#   frequency 'daily'
+#   rotate 7
+# end
 
 
-unless node['postgresql']['conf_dir'] == node['postgresql']['data_dir']
-  directory node['postgresql']['conf_dir'] do
-    owner     node['postgresql']['db_user']
-    group     node['postgresql']['db_group']
-    mode      '0755'
-  end
+# create user, group and directories
+
+group node['postgresql']['user']['group'] do
+  system true
+end
+
+user node['postgresql']['user']['name'] do
+  gid    node['postgresql']['user']['group']
+  home   node['postgresql']['user']['home']
+  system true
+end
+
+directory node['postgresql']['user']['home'] do
+  owner     node['postgresql']['user']['name']
+  group     node['postgresql']['user']['group']
+  mode      '0755'
+end
+
+directory node['postgresql']['conf_dir'] do
+  owner     node['postgresql']['user']['name']
+  group     node['postgresql']['user']['group']
+  mode      '0755'
+  recursive true
+  not_if  { node['postgresql']['conf_dir'] == node['postgresql']['data_dir'] }
 end
 
 directory node['postgresql']['data_dir'] do
-  owner     node['postgresql']['db_user']
-  group     node['postgresql']['db_group']
+  owner     node['postgresql']['user']['name']
+  group     node['postgresql']['user']['group']
   mode      '0700'
+  recursive true
 end

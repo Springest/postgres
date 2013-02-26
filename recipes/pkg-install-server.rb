@@ -20,16 +20,17 @@
 
 node['postgresql']['server_packages'].each { |pkg| package pkg }
 
-unless node['postgresql']['conf_dir'] == node['postgresql']['data_dir']
-  directory node['postgresql']['conf_dir'] do
-    owner     node['postgresql']['db_user']
-    group     node['postgresql']['db_group']
-    mode      '0755'
-  end
+directory node['postgresql']['conf_dir'] do
+  owner     node['postgresql']['user']['name']
+  group     node['postgresql']['user']['group']
+  mode      '0755'
+  recursive true
+  not_if  { node['postgresql']['conf_dir'] == node['postgresql']['data_dir'] }
 end
 
 directory node['postgresql']['data_dir'] do
-  owner     node['postgresql']['db_user']
-  group     node['postgresql']['db_group']
+  owner     node['postgresql']['user']['name']
+  group     node['postgresql']['user']['group']
   mode      '0700'
+  recursive true
 end

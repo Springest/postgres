@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgresql
-# Resource:: config
+# Provider:: server_config
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,10 +18,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-actions        :create, :delete
-default_action :create
+action :create do
+  service 'postgresql' do
+    service_name node['postgresql']['service_name']
+    supports :restart => true, :status => true, :reload => true
+    action   :enable
+  end
 
-attribute :name,      :kind_of => String, :name_attribute => true
-attribute :cookbook,  :kind_of => String, :default => 'postgresql'
-attribute :source,    :kind_of => String, :default => 'postgresql.conf.erb'
-attribute :variables, :kind_of => Hash,   :default => {}
+  template 'postgresql.conf' do
+    path      "#{node['postgresql']['conf_dir']}/postgresql.conf"
+    mode      '0640'
+    owner     node['postgresql']['user']['name']
+    group     node['postgresql']['user']['group']
+
+    cookbook  new_resource.cookbook
+    source    new_resource.source
+    variables new_resource.variables
+
+    notifies  :reload, resources(:service => 'postgresql'), :immediately
+  end
+end

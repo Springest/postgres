@@ -26,11 +26,11 @@ action :create do
   end
 
   certificate_manage new_resource.name do
-    cert_path       node['postgresql']['data_dir']
-    owner           node['postgresql']['db_user']
-    group           node['postgresql']['db_group']
-    key_file        'server.key'
-    cert_file       'server.crt'
+    cert_path  node['postgresql']['data_dir']
+    owner      node['postgresql']['user']['name']
+    group      node['postgresql']['user']['group']
+    key_file   'server.key'
+    cert_file  'server.crt'
 
     data_bag        new_resource.data_bag        if new_resource.data_bag
     data_bag_secret new_resource.data_bag_secret if new_resource.data_bag_secret
