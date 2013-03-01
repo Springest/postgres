@@ -22,7 +22,7 @@ default['postgres']['xc']['enabled'] = false
 default['postgres']['xc']['version'] = '1.0.2'
 default['postgres']['xc']['url'] = "http://garr.dl.sourceforge.net/project/postgres-xc/Version_1.0/pgxc-v#{node['postgres']['xc']['version']}.tar.gz"
 
-default['postgres']['xc']['git']['repo'] = 'git://postgres-xc.git.sourceforge.net/gitroot/postgres-xc/postgres-xc'
+default['postgres']['xc']['git']['repo'] = 'git://github.com/postgres-xc/postgres-xc.git'
 default['postgres']['xc']['git']['branch'] = 'master'
 
 default['postgres']['xc']['postgis']['version'] = '2.0.2'
