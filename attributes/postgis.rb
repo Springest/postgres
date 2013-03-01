@@ -24,6 +24,8 @@ default['postgis']['version'] = '2.0.2'
 default['postgis']['url'] = "http://download.osgeo.org/postgis/source/postgis-#{node['postgis']['version']}.tar.gz"
 default['postgis']['pg_config'] = '/usr/bin/pg_config'
 
+default['postgis']['svn']['repo'] = 'http://svn.osgeo.org/postgis/trunk'
+
 case platform
 when 'ubuntu', 'debian'
   default['postgis']['packages'] = [ 'postgis', "postgresql-#{node['postgres']['version']}-postgis" ]
