@@ -18,8 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-postgresql_config 'postgresql.conf'
-postgresql_hba 'pg_hba.conf'
+postgres_server_config 'postgresql.conf'
+postgres_hba 'pg_hba.conf'
 
 # deploy certificates if configured
 if node['postgres']['certificate']
