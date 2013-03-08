@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgres
-# Recipe:: default_server
+# Recipe:: default-server-config
 #
 # Copyright 2012, Chris Aumann
 #
@@ -17,8 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
-include_recipe 'postgres::pkg-install-server'
 
 postgresql_config 'postgresql.conf'
 postgresql_hba 'pg_hba.conf'
