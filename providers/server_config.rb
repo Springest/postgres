@@ -19,12 +19,6 @@
 #
 
 action :create do
-  service 'postgresql' do
-    service_name node['postgres']['service_name']
-    supports :restart => true, :status => true, :reload => true
-    action   :enable
-  end
-
   template 'postgresql.conf' do
     path      "#{node['postgres']['conf_dir']}/postgresql.conf"
     mode      '0640'
@@ -34,7 +28,12 @@ action :create do
     cookbook  new_resource.cookbook
     source    new_resource.source
     variables new_resource.variables
+  end
 
-    notifies  :reload, resources(:service => 'postgresql'), :immediately
+  service 'postgresql' do
+    service_name node['postgres']['service_name']
+    supports   :restart => true, :status => true, :reload => true
+    subscribes :reload, resources(:template => 'postgresql.conf'), :immediately
+    action   [ :enable, :start ]
   end
 end
