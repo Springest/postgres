@@ -24,3 +24,4 @@ attribute :name,      :kind_of => String, :name_attribute => true
 attribute :cookbook,  :kind_of => String, :default => 'postgres'
 attribute :source,    :kind_of => String, :default => 'postgresql.conf.erb'
 attribute :variables, :kind_of => Hash,   :default => {}
+attribute :method,    :kind_of => Symbol, :default => :reload
