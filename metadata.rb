@@ -4,5 +4,5 @@ license          'GNU Public License 3.0'
 description      'Installs/Configures postgres'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.3.0'
-suggests         'certificate'
-suggests         'logrotate'
+depends          'certificate'
+depends          'logrotate'
