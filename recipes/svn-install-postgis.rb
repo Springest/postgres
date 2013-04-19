@@ -21,7 +21,7 @@
 package 'curl'
 
 # install required packages (ubuntu)
-if node.platform == 'ubuntu'
+if node['platform'] == 'ubuntu'
   package 'subversion'
   package 'build-essential'
   package 'autoconf'
