@@ -42,7 +42,6 @@ def install_postgis
 
   subversion tmpdir do
     repository node['postgis']['svn']['repo']
-    revision   node['postgis']['svn']['branch']
   end
 
   execute 'creating ./configure' do
