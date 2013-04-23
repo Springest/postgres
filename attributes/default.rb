@@ -75,7 +75,7 @@ when 'ubuntu'
   default['postgres']['server_packages'] = [ "postgresql-#{node['postgres']['version']}" ]
   default['postgres']['contrib_packages'] = [ "postgresql-contrib-#{node['postgres']['version']}" ]
 
-when 'redhat', 'centos', 'scientific'
+when 'redhat', 'centos', 'scientific', 'amazon'
 
   default['postgres']['version'] = '8.4'
   default['postgres']['user']['name'] = 'postgres'
