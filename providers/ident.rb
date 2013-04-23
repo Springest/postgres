@@ -35,6 +35,6 @@ action :create do
     source    new_resource.source
     variables new_resource.variables
 
-    notifies  :reload, resources(:service => 'postgresql'), :immediately
+    notifies  :reload, 'service[postgresql]', :immediately
   end
 end

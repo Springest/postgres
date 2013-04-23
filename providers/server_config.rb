@@ -33,7 +33,7 @@ action :create do
   service 'postgresql' do
     service_name node['postgres']['service_name']
     supports   :restart => true, :status => true, :reload => true
-    subscribes new_resource.method, resources(:template => 'postgresql.conf'), :immediately
+    subscribes new_resource.method, 'template[postgresql.conf]', :immediately
     action   [ :enable, :start ]
   end
 end
