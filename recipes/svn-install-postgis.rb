@@ -18,24 +18,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package 'curl'
 
-# install required packages (ubuntu)
-if node['platform'] == 'ubuntu'
-  package 'subversion'
-  package 'build-essential'
-  package 'autoconf'
-  package 'libpq-dev'
-  package 'libxml2-dev'
-  package 'libproj-dev'
-  package 'libgeos-dev'
-
-  # gdal has a lot of dependencies (e.g. mysql-common)
-  package 'libgdal1-dev'
+# install required packages
+case node['platform_family']
+when 'debian'
+  pkgs = %[curl build-essential libpq-dev libxml2-dev libproj-dev libgeos-dev libgdal1-dev]
 
   # don't install server-dev package when using postgres-xc
-  package "postgresql-server-dev-#{node['postgres']['version']}" unless node['postgres']['xc']['enabled']
+  pkgs << "postgresql-server-dev-#{node['postgres']['version']}" unless node['postgres']['xc']['enabled']
+
+when 'rhel'
+  pkgs = %[curl make gcc automake postgresql-devel libxml2-devel proj-devel geos-devel gdal-devel]
 end
+
+pkgs.each { |pkg| package pkg }
+
 
 def install_postgis
   tmpdir = %x[mktemp -d].chomp

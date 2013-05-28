@@ -18,14 +18,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package 'curl'
-package 'git-core'
-package 'build-essential'
-package 'libssl-dev'
-package 'libreadline6-dev'
-package 'flex'
-package 'bison'
-package 'zlib1g-dev'
+case node['platform_family']
+when 'debian'
+  pkgs = %[curl git-core build-essential libssl-dev libreadline6-dev flex bison zlib1g-dev]
+when 'rhel'
+  pkgs = %[curl git make gcc automake openssl-devel readline-devel flex bison zlib-devel]
+end
+
+pkgs.each { |pkg| package pkg }
+
 
 def install_postgres_xc
   tmpdir = %x[mktemp -d].chomp
