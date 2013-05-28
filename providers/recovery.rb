@@ -33,8 +33,7 @@ action :create do
   # use .done as file extension, if this node is a postgres master
   path.sub!(/\.[^\.]+$/, '.done') unless is_slave
 
-  template 'pg_ident.conf' do
-    path      path
+  template path do
     mode      '0644'
     owner     node['postgres']['user']['name']
     group     node['postgres']['user']['group']
