@@ -99,5 +99,5 @@ when 'redhat', 'centos', 'scientific', 'amazon'
 end
 
 
-# per default, don't use ssl certificates
+# by default, don't use ssl certificates
 default['postgres']['certificate'] = false
