@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postgres
-# Recipe:: git-ptop
+# Recipe:: git-install-ptop
 #
 # Copyright 2012, Chris Aumann
 #
@@ -18,9 +18,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package 'git-core'
-package 'build-essential'
-package 'libncurses5-dev'
+cmd = Chef::ShellOut.new('which pg_config').run_command
+Chef::Application.fatal!('pg_config not available. Install postgres before installing ptop!') unless cmd.exitstatus == 0
+
+case node['platform_family']
+when 'debian'
+  pkgs = %[git-core build-essential automake libncurses5-dev]
+when 'rhel'
+  pkgs = %[git make automake gcc ncurses-devel]
+end
+
+pkgs.each { |pkg| package pkg }
+
 
 # get rid of old ptop
 package 'ptop' do
@@ -36,17 +45,15 @@ def install_pg_top
     depth 1
   end
 
-  execute 'running autogen.sh' do
+  execute './autogen.sh' do
     cwd tmpdir
-    command './autogen.sh'
   end
 
-  execute 'running configure' do
+  execute "./configure --prefix=#{node['postgres']['ptop']['prefix']}" do
     cwd tmpdir
-    command "./configure --prefix=#{node['postgres']['ptop']['prefix']}"
   end
 
-  execute 'compiling postgres-xc' do
+  execute 'compiling ptop' do
     cwd tmpdir
     command 'make && make install'
   end
