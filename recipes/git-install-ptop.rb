@@ -23,9 +23,9 @@ Chef::Application.fatal!('pg_config not available. Install postgres before insta
 
 case node['platform_family']
 when 'debian'
-  pkgs = %[git-core build-essential automake libncurses5-dev]
+  pkgs = %w[git-core build-essential automake libncurses5-dev]
 when 'rhel'
-  pkgs = %[git make automake gcc ncurses-devel]
+  pkgs = %w[git make automake gcc ncurses-devel]
 end
 
 pkgs.each { |pkg| package pkg }

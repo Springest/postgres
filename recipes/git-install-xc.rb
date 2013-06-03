@@ -20,9 +20,9 @@
 
 case node['platform_family']
 when 'debian'
-  pkgs = %[curl git-core build-essential libssl-dev libreadline6-dev flex bison zlib1g-dev]
+  pkgs = %w[curl git-core build-essential libssl-dev libreadline6-dev flex bison zlib1g-dev]
 when 'rhel'
-  pkgs = %[curl git make gcc automake openssl-devel readline-devel flex bison zlib-devel]
+  pkgs = %w[curl git make gcc automake openssl-devel readline-devel flex bison zlib-devel]
 end
 
 pkgs.each { |pkg| package pkg }

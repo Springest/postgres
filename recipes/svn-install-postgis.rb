@@ -22,13 +22,13 @@
 # install required packages
 case node['platform_family']
 when 'debian'
-  pkgs = %[curl build-essential libpq-dev libxml2-dev libproj-dev libgeos-dev libgdal1-dev]
+  pkgs = %w[curl build-essential libpq-dev libxml2-dev libproj-dev libgeos-dev libgdal1-dev]
 
   # don't install server-dev package when using postgres-xc
   pkgs << "postgresql-server-dev-#{node['postgres']['version']}" unless node['postgres']['xc']['enabled']
 
 when 'rhel'
-  pkgs = %[curl make gcc automake postgresql-devel libxml2-devel proj-devel geos-devel gdal-devel]
+  pkgs = %w[curl make gcc automake postgresql-devel libxml2-devel proj-devel geos-devel gdal-devel]
 end
 
 pkgs.each { |pkg| package pkg }
