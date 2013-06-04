@@ -21,7 +21,7 @@
 # use ruby_block, as pg_config might not be available during parsing time
 ruby_block 'check for pg_config' do
   block do
-    cmd = Chef::ShellOut.new('which pg_config').run_command
+    cmd = Mixlib::ShellOut.new('which pg_config').run_command
     Chef::Application.fatal!('pg_config not available. Install postgres before installing ptop!') unless cmd.exitstatus == 0
   end
 end
