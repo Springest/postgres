@@ -19,9 +19,13 @@
 #
 
 action :install do
-  execute "pgxn install #{new_resource.package}"
+  execute "pgxn install #{new_resource.package}" do
+    not_if "test -f #{node['postgres']['contrib_dir']}/../extension/#{new_resource.package}.control"
+  end
 end
 
 action :uninstall do
-  execute "pgxn install #{new_resource.package}"
+  execute "pgxn install #{new_resource.package}" do
+    only_if "test -f #{node['postgres']['contrib_dir']}/../extension/#{new_resource.package}.control"
+  end
 end
