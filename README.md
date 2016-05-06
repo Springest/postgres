@@ -1,3 +1,10 @@
+This project is **no longer maintained**.
+
+If you're interested in taking it over, we'd love to hear from you.
+Email [developers@springest.com](mailto:developers@springest.com).
+
+*****
+
 # Description
 
 This cookbook was inspired by [https://github.com/opscode-cookbooks/postgres](https://github.com/opscode-cookbooks/postgres).
